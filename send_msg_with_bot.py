@@ -3,19 +3,22 @@ import os
 import sys
 
 #token that can be generated talking with @BotFather on telegram
-my_token = 'Yout bot token'
+
+cred = open('/home/nequus/Documents/Programing/TelegramCopyPaste/my_credentials.txt', 'r')
+
+my_token = str(cred.readline().rstrip())
+my_chat_id = int(cred.readline().rstrip())
 
 def send(msg, chat_id, token=my_token):
-	"""
-	Send a mensage to a telegram user specified on chatId
-	chat_id must be a number!
-	"""
 	bot = telegram.Bot(token=token)
-	bot.sendMessage(chat_id=chat_id, text=msg)
+	if os.path.exists(msg) and os.path.isfile(msg):
+		bot.send_document(chat_id=chat_id, document=open(msg, 'rb'))
+	else:
+		bot.sendMessage(chat_id=chat_id, text=msg)
 
 
-# proxy setting ##################
-proxy = 'http://178.62.232.133:3128/' #some proxy I found
+# proxy setting, should be in this format proxy = 'http://51.68.121.144:3128/', notice the http:// / part ################## 
+proxy = 'http://51.68.121.144:3128/'
 
 os.environ['http_proxy'] = proxy
 os.environ['HTTP_PROXY'] = proxy
@@ -27,4 +30,4 @@ os.environ['HTTPS_PROXY'] = proxy
 
 ###################################
 
-send(sys.argv[1], "yours chat id") #TODO: make to tool to find chatid out
+send(sys.argv[1], my_chat_id)
